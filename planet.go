@@ -6,7 +6,11 @@ import (
 	"strings"
 )
 
+type zerosize struct{}
+
 type City struct {
+	planet *Planet
+
 	name string
 
 	north *City
@@ -19,9 +23,7 @@ type City struct {
 	destroyed bool
 }
 
-func (c City) nearbyCities() []*City {
-	// TODO: THIS IS WRONG!
-	// need to have nodes which are pointing to this city
+func (c *City) nearbyCities() []*City {
 	cities := []*City{}
 	if c.north != nil {
 		cities = append(cities, c.north)
@@ -38,9 +40,24 @@ func (c City) nearbyCities() []*City {
 	return cities
 }
 
-func (c *City) destroy() {
-	// if anything here panics it means that the graph was incorrectly built!
-	c.destroyed = true
+// remove removes the city fromt the planet and removes all the connections in and out
+func (c *City) remove() {
+	for pointee := range c.incoming {
+		if pointee.north == c {
+			pointee.north = nil
+		}
+		if pointee.south == c {
+			pointee.south = nil
+		}
+		if pointee.east == c {
+			pointee.east = nil
+		}
+		if pointee.west == c {
+			pointee.west = nil
+		}
+	}
+
+	delete(c.planet.cities, c.name)
 }
 
 func (c *City) addIncoming(link *City) {
@@ -52,6 +69,16 @@ func (c *City) addIncoming(link *City) {
 
 type Planet struct {
 	cities map[string]*City
+}
+
+func (p Planet) copyPlanet() Planet {
+	// TODO: implement a more performant copy of a planet
+	// Note: a bit hackish way of copy-ing the planet ;)
+	newp, err := Unmarshal(Marshal(p))
+	if err != nil {
+		panic(err)
+	}
+	return newp
 }
 
 func (p *Planet) init() {
@@ -75,7 +102,8 @@ func (p *Planet) getCreateCity(name string) (*City, error) {
 		return city, nil
 	}
 	city := &City{
-		name: name,
+		name:   name,
+		planet: p,
 	}
 	p.cities[name] = city
 	return city, nil

@@ -20,3 +20,5 @@ A north=B
 B
 ```
 are equivalent.
+
+- I added the option for the alien not to move at all. If we have `A north=B` and `B north=A` and we dispatch two aliens, then they would never meet because they would always travel at the same time.
