@@ -216,6 +216,9 @@ func TestMarshaling(t *testing.T) {
 							name: "B",
 						},
 					},
+					"B": {
+						name: "B",
+					},
 					"C": {
 						name: "C",
 					},
@@ -223,6 +226,7 @@ func TestMarshaling(t *testing.T) {
 			},
 			expOut: `
 			A north=B
+			B
 			C
 			`,
 		},

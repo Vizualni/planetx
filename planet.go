@@ -14,7 +14,7 @@ type City struct {
 	east  *City
 	west  *City
 
-	incoming []*City
+	incoming map[*City]zerosize
 
 	destroyed bool
 }
@@ -40,19 +40,14 @@ func (c City) nearbyCities() []*City {
 
 func (c *City) destroy() {
 	// if anything here panics it means that the graph was incorrectly built!
-	if c.north != nil {
-		c.north.south = nil
-	}
-	if c.south != nil {
-		c.south.north = nil
-	}
-	if c.east != nil {
-		c.east.west = nil
-	}
-	if c.west != nil {
-		c.west.east = nil
-	}
 	c.destroyed = true
+}
+
+func (c *City) addIncoming(link *City) {
+	if c.incoming == nil {
+		c.incoming = make(map[*City]zerosize)
+	}
+	c.incoming[link] = zerosize{}
 }
 
 type Planet struct {
@@ -112,7 +107,7 @@ func planetsEqual(p1, p2 Planet) bool {
 	return reflect.DeepEqual(buildCityMap(p1), buildCityMap(p2))
 }
 
-func addRoad(from *City, to *City, direction string) error {
+func (from *City) addRoad(to *City, direction string) error {
 	switch strings.ToLower(direction) {
 	case "north":
 		from.north = to
@@ -125,5 +120,6 @@ func addRoad(from *City, to *City, direction string) error {
 	default:
 		return fmt.Errorf("'%s': %w", direction, ErrInvalidDirection)
 	}
+	to.addIncoming(from)
 	return nil
 }

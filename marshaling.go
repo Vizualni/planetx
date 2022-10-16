@@ -70,7 +70,7 @@ func Unmarshal(data []byte) (Planet, error) {
 			if err != nil {
 				return Planet{}, err
 			}
-			err = addRoad(city, toCity, direction)
+			err = city.addRoad(toCity, direction)
 			if err != nil {
 				return Planet{}, err
 			}
