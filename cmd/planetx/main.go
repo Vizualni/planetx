@@ -66,7 +66,7 @@ var (
 )
 
 func main() {
-	simulateInvasionCmd.Flags().IntVar(&simulateInvasionFlags.Iterations, "iterations", 10000, "number of iterations")
+	simulateInvasionCmd.Flags().IntVar(&simulateInvasionFlags.Iterations, "iterations", 10000, "total number of iterations")
 	simulateInvasionCmd.Flags().IntVar(&simulateInvasionFlags.Aliens, "aliens", 0, "number of aliens to send to a planet")
 	simulateInvasionCmd.Flags().Int64Var(&simulateInvasionFlags.Seed, "seed", 0, "seed to use for the random behaviour. use 0 for cryptographic randomness")
 	simulateInvasionCmd.Flags().StringVar(&simulateInvasionFlags.Path, "path", "", "path to the planetx file")
