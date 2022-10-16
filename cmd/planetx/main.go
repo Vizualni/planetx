@@ -57,7 +57,7 @@ var (
 				fmt.Printf("City %s destroyed by aliens %s and %s fighting.\n", fight.City, fight.Alien1, fight.Alien2)
 			}
 			fmt.Println("========================")
-			fmt.Println("New planet looks like:")
+			fmt.Println("A planet now looks like:")
 			fmt.Println(string(planetx.Marshal(newPlanet)))
 
 			return nil

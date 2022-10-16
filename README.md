@@ -17,7 +17,7 @@ Let's define variables:
 - M number of aliens
 - K max iteration
 
-Given that M's upper bound is set with the N, which is the number of cities, we can say that `M == N`.
+Given that M's upper bound is directly defined with the N, which is the number of cities, we can say that `M == N`.
 
 #### Time
 
@@ -26,7 +26,7 @@ Time complexity is: `O(K * M) ~> *O(M)* == *O(N)*` which means that it linearly 
 
 #### Space
 
-Space complexity is: `O(4*N + O(M)) ~> O(N+M) -> given that M can get as large as N, then ~> O(N+N) ~> O(2N) -> *O(N)*`. For every city in a graph we are saving at most 4 locations (N, S, W, E) + we are also saving the location of every alien on a map.
+Space complexity is: `O(4*N + M) ~> O(N+M) -> given that M can get as large as N, then ~> O(N+N) ~> O(2N) -> *O(N)*`. For every city in a graph we are saving at most 4 locations (N, S, W, E) + we are also saving the location of every alien on a map.
 
 
 ### A possible alternative
@@ -93,11 +93,11 @@ C south=B east=A
 ## Assumptions and decisions I had to make when making this
 
 - Roads are not bi-directional. Example input: `X north=Y` does not mean that I can get to X from Y if I go south, unless there is specific line in the file that says `Y {direction}=X`.
-- Input `A north=B`,`B north=A` and similar paths are considered to be valid, even though they don't make sense in real life unless both are located on north pole of the planet X ;). Using the same analogy `A west=B`, 'B west=A' also makes sense. As an example, if we start in London, and go west (by some imaginary road) we will end up in New York. Then going west and around the globe, we will end up back in London. Given that those restrictions are not specified in the task description, I have to make that assumption.
+- Input `A north=B`,`B north=A` and similar paths are considered to be valid, even though they don't make sense in real life unless both are located on north pole of the planet X ;). Using the same analogy `A west=B`, `B west=A` also makes sense. As an example, if we start in London, and go west (by some imaginary road) we will end up in New York. Then going west and around the globe, we will end up back in London. Given that those restrictions are not specified in the task description, I have to make that assumption.
 - City names are case sensitive. A city name `A` is different than the city name `a` and those are two different cities.
 - City names can be made out of letters (both uppercase and lowercase) and can contain `-`. City name must start with a letter.
 - Input such as `A north=B west=B` is valid. If B is exactly on the same latitude, but on the opposide side of the globe, then there could exist a road going west which would take us to B and there could also exist a road going north that could take us to B.
-- When Aliens first arrive, they can't arrive at the same city at the same time. This doesn't actually play any role, but rather a decision I had to make.
+- When Aliens first arrive, they can't arrive at the same city at the same time. This doesn't actually play any role or adds or removes any complexity, but rather it's a decision I had to make.
 - Inputs:
 ```
 A north=B
@@ -111,4 +111,4 @@ B
 ```
 are equivalent.
 
-- I added the option for the alien not to move at all. If we have `A north=B` and `B north=A` and we dispatch two aliens, then they would never meet because they would always travel at the same time.
+- I added the option for the alien not to move at all. If we have `A north=B` and `B south=A` and we dispatch two aliens, then they would never meet because they would always travel at the same time and would constantly switch places.
