@@ -8,6 +8,7 @@ import (
 
 type zerosize struct{}
 
+// City represents a city on a given planet x
 type City struct {
 	planet *Planet
 
@@ -19,10 +20,9 @@ type City struct {
 	west  *City
 
 	incoming map[*City]zerosize
-
-	destroyed bool
 }
 
+// nearbyCities returns a list of cities where the current city is leading to
 func (c *City) nearbyCities() []*City {
 	cities := []*City{}
 	if c.north != nil {
@@ -60,6 +60,7 @@ func (c *City) remove() {
 	delete(c.planet.cities, c.name)
 }
 
+// addIncoming keeps a list of all cities that are pointing to a current one.
 func (c *City) addIncoming(link *City) {
 	if c.incoming == nil {
 		c.incoming = make(map[*City]zerosize)
@@ -67,10 +68,13 @@ func (c *City) addIncoming(link *City) {
 	c.incoming[link] = zerosize{}
 }
 
+// Planet represent a planetX
 type Planet struct {
 	cities map[string]*City
 }
 
+// copyPlanet copies a planet. It's not optimized call, but rather is marshals
+// the planet and then unmarshals it.
 func (p Planet) copyPlanet() Planet {
 	// TODO: implement a more performant copy of a planet
 	// Note: a bit hackish way of copy-ing the planet ;)
@@ -81,6 +85,7 @@ func (p Planet) copyPlanet() Planet {
 	return newp
 }
 
+// init sets the nil value planet
 func (p *Planet) init() {
 	if p == nil {
 		p = &Planet{}
@@ -90,6 +95,8 @@ func (p *Planet) init() {
 	}
 }
 
+// getCreateCity is a possible anti-pattern but it gets a city by name or it
+// creates one by the provided name.
 func (p *Planet) getCreateCity(name string) (*City, error) {
 	err := verifyCityName(name)
 	if err != nil {
@@ -109,6 +116,7 @@ func (p *Planet) getCreateCity(name string) (*City, error) {
 	return city, nil
 }
 
+// planetsEqual checks if p1 and p2 planets are equal
 func planetsEqual(p1, p2 Planet) bool {
 	type cityMap map[string]map[string]string
 	buildCityMap := func(p Planet) cityMap {
@@ -135,6 +143,7 @@ func planetsEqual(p1, p2 Planet) bool {
 	return reflect.DeepEqual(buildCityMap(p1), buildCityMap(p2))
 }
 
+// addRoad adds a road between the two cities
 func (from *City) addRoad(to *City, direction string) error {
 	switch strings.ToLower(direction) {
 	case "north":

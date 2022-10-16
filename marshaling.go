@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+// Marshal takes the Planet and transforms it into:
+// {city name} {direction1}={other city name} {directionN}={other city name}
 func Marshal(p Planet) []byte {
 	if len(p.cities) == 0 {
 		return nil
@@ -39,6 +41,8 @@ func Marshal(p Planet) []byte {
 	return []byte(sb.String())
 }
 
+// Unmarshal takes the given data in the `{city name} {direction}={city name}`
+// and builds the Planet.
 func Unmarshal(data []byte) (Planet, error) {
 	p := &Planet{
 		cities: make(map[string]*City),

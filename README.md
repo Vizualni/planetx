@@ -1,5 +1,47 @@
 # PlanetX invasion!
 
+## My notes :)
+
+Hello reviewers! 
+
+## Algorithm
+
+This problem can be modeled as a simple graph where cities are nodes and roads between them represent directed edges between the cities (see Assumptions why those are directed).
+To move the aliens on the planet a `Randomizer` interface is used to help to determine which way to move (in either completely pseudo-random way (can be repeatable) or with the cryptorandom method).
+The algorithm is quite easy. We spawn M aliens (where M<=N, where N is number of cities) randomly on a map, and move them on every iteration. If two end up in the same city, we remove the city from the graph by removing roads from the cities that lead to the target city + we also remove the two aliens that fought.
+
+### Time & Space complexity
+
+Let's define variables:
+- N number of cities on a planet
+- M number of aliens
+- K max iteration
+
+Given that M's upper bound is set with the N, which is the number of cities, we can say that `M == N`.
+
+#### Time
+
+Time complexity is: `O(K * M) ~> *O(M)* == *O(N)*` which means that it linearly depends on the number of aliens spawned. Size of a planet and number of roads do not determine the complexity. Given that K is a constant, we can ignore it, thus we come to a `O(M)` as time complexity.
+
+
+#### Space
+
+Space complexity is: `O(4*N + O(M)) ~> O(N+M) -> given that M can get as large as N, then ~> O(N+N) ~> O(2N) -> *O(N)*`. For every city in a graph we are saving at most 4 locations (N, S, W, E) + we are also saving the location of every alien on a map.
+
+
+### A possible alternative
+
+One of the alternative solutions would be to use goroutines, but it just adds a bit more complexity as there would be a lot of syncing required between the goroutines (each Alien would be its own goroutine), and we would not gain any performance boosts, rather it will become slower and more difficult to maintain. For large enough N (where N is number of cities => max number of Aliens) then we might spawn quite a lot of goroutines, which is not a problem in itself as goroutines are quite light-weight, but rather it becomes impractical.
+
+### Possible improvements
+
+- Given that aliens can get "stranded" quite easily when city that happens to be "hub" between two other sub-graphs gets destroyed. Then those alies can't come to the other city. Improvement that I see is to detect when two graphs _split_ when destroying a city so that those aliens can be ignored.
+- Given that this is a directed graph, an Alien can end up on the "leaf" of the graph and can't go anywhere else, then we can simply stop tracking that alien for its movements.
+
+None of those improvements have been implemented because those would not improve the Big-Oh of the already implemented algorithm (+ it's Sunday for me ;) ).
+
+
+
 ## How to use?
 
 

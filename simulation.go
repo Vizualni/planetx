@@ -9,12 +9,16 @@ type Alien int
 
 func (a Alien) String() string { return fmt.Sprintf("Alien %d", a) }
 
+// Fight holds information about two aliens fighting and the city that they have destroyed.
 type Fight struct {
 	City   string
 	Alien1 Alien
 	Alien2 Alien
 }
 
+// DistributeAliens takes a planet, randomizer and a number of alients to
+// generate on the planet and returns a map of aliens distribution in cities.
+// Number of aliens must be lower than the cities on the planet (see README).
 func DistributeAliens(p Planet, rnd Randomizer, n int) map[Alien]string {
 	if n < 0 {
 		panic("cannot distribute negative amount of Aliens")
@@ -38,6 +42,10 @@ func DistributeAliens(p Planet, rnd Randomizer, n int) map[Alien]string {
 	return aliens
 }
 
+// SimulateInvasion takes the planet, aliens, randomizer and max number of
+// iterations and simulates the alien invasion. When two aliens fight in the
+// city, both aliens end up being dead and the city is destroyed in the
+// process.
 func SimulateInvasion(
 	p Planet,
 	aliens map[Alien]string,
