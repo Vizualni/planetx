@@ -44,6 +44,9 @@ func SimulateInvasion(
 	rnd Randomizer,
 	maxIteration int,
 ) ([]Fight, Planet) {
+	if maxIteration < 0 {
+		panic("maxIteration must be positive number")
+	}
 	fights := []Fight{}
 	// copy aliens map
 	// we should not modify the passed-in state
